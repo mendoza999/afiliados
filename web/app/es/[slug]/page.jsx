@@ -3,8 +3,9 @@ import { getRankings, categoryBySlug } from "../../../lib/seed.js";
 export const dynamic = "force-dynamic"; // ponytail: sin ISR; cada visita lee Postgres (tráfico bajo, datos siempre frescos tras cada carga)
 export function generateStaticParams() { return CATEGORIES.map((c) => ({ slug: c.slug })); }
 export async function generateMetadata({ params }) {
-  const c = categoryBySlug(params.slug);
-  return { title: `${c?.name || params.slug}: top 5 más vendidos — elijemejor.shop` };
+  const { slug } = await params; // Next 15: params es async
+  const c = categoryBySlug(slug);
+  return { title: `${c?.name || slug}: top 5 más vendidos — elijemejor.shop` };
 }
 function Card({ p, i, badge }) {
   return (
@@ -25,9 +26,10 @@ function Card({ p, i, badge }) {
   );
 }
 export default async function CategoryPage({ params }) {
-  const cat = categoryBySlug(params.slug);
+  const { slug } = await params; // Next 15: params es async
+  const cat = categoryBySlug(slug);
   if (!cat) return <p>No existe esta categoría.</p>;
-  const data = await getRankings("es", params.slug);
+  const data = await getRankings("es", slug);
   const jsonLd = {
     "@context": "https://schema.org", "@type": "ItemList", name: `Top ${cat.name}`,
     itemListElement: [...data.bestseller, ...data["top-rated"]].slice(0, 10).map((p, i) => ({
