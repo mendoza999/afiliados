@@ -1,6 +1,6 @@
 import { CATEGORIES, affiliateUrl } from "../../../lib/categories.js";
 import { getRankings, categoryBySlug } from "../../../lib/seed.js";
-export const revalidate = 86400;
+export const dynamic = "force-dynamic"; // ponytail: sin ISR; cada visita lee Postgres (tráfico bajo, datos siempre frescos tras cada carga)
 export function generateStaticParams() { return CATEGORIES.map((c) => ({ slug: c.slug })); }
 export async function generateMetadata({ params }) {
   const c = categoryBySlug(params.slug);
