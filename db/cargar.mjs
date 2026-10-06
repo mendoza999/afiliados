@@ -12,7 +12,7 @@ if (!["bestseller", "top-rated"].includes(tipo) || !urls.length) {
   console.log('Uso: node db/cargar.mjs freidora-aire bestseller "<url1>" ... "<url5>"');
   process.exit(1);
 }
-const asins = urls.map((u) => (u.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/) || [])[1]).filter(Boolean);
+const asins = urls.map((u) => (u.match(/\/(?:dp|gp\/(?:product|aw\/d))\/([A-Z0-9]{10})/) || [])[1]).filter(Boolean);
 if (asins.length !== urls.length) { console.error("Alguna URL no tiene /dp/ASIN válido"); process.exit(1); }
 if (printOnly) {
   asins.forEach((asin, i) => {
